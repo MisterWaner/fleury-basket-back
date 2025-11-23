@@ -1,6 +1,6 @@
 import { fetch } from "undici";
 import { SimpleCache } from "./cache.js";
-import { delay } from "../utils/delay.js";
+import { delay } from "./delay.js";
 
 const cache = new SimpleCache<any>();
 
@@ -12,7 +12,7 @@ export async function fetchWithCache(
 ) {
     const cached = cache.get(url);
     if (cached) {
-        return { fromCache: true, data: cached };
+        return cached;
     }
 
     await delay(GLOBAL_SCRAPE_DELAY);
