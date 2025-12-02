@@ -1,11 +1,10 @@
 import puppeteer from "puppeteer";
 import { parseRencontres } from "./ffbb.parser.js";
-import { cleanParse } from "./ffbb.cleanParser.js";
-import type { Game } from "./ffbb.cleanParser.js";
+import type { ParsedGame } from "./ffbb.parser.js";
 import { SimpleCache } from "../../lib/cache.js";
 import { delay } from "../../lib/delay.js";
 
-const scrapedDataCache = new SimpleCache<Game[]>();
+const scrapedDataCache = new SimpleCache<ParsedGame[]>();
 const GLOBAL_SCRAPE_DELAY_MS = 2000;
 
 export async function scrapeRencontres(url: string) {
@@ -31,7 +30,11 @@ export async function scrapeRencontres(url: string) {
         await page.goto(url, { waitUntil: "networkidle2" });
 
         const raw = await parseRencontres(page);
-        const parsed = cleanParse(raw);
+        const parsed = raw.map((game) => ({
+            ...game,
+            us: isNaN(game.us as number) ? null : game.us,
+            them: isNaN(game.them as number) ? null : game.them,
+        }));
         
         scrapedDataCache.set(url, parsed, 60 * 60 * 1000); // Cache for 1 hour
 
