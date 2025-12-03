@@ -11,7 +11,7 @@ export interface ParsedGame {
     result: "Victoire" | "Défaite" | "N/A";
 }
 
-export async function parseRencontres(page: Page): Promise<ParsedGame[]> {
+export async function parseCalendar(page: Page): Promise<ParsedGame[]> {
     await page.waitForSelector("#calendar", { timeout: 5000 });
 
     const data = await page.evaluate(() => {

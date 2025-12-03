@@ -8,5 +8,11 @@ export default async function ffbbRoutes(app: FastifyInstance) {
     app.get("/ffbb/senior-2/rencontres", async () =>
         FFBBService.getSenior2Rencontres()
     );
+    app.get("/ffbb/senior-1/classement", async () =>
+        FFBBService.getSenior1Ranking()
+    );
+    app.get("/ffbb/senior-2/classement", async () =>
+        FFBBService.getSenior2Ranking()
+    );
 }
 
